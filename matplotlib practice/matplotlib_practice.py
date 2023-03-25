@@ -1,13 +1,16 @@
+#import necessary functions
 import matplotlib.pyplot as plt
 import pandas as pd
 from keras.datasets import mnist
 import tensorflow as tf
 
+#Load the mnist dataset
 (X_train_image, y_train_lable),(X_test_image, y_test_lable) = mnist.load_data()
 print("Data image shape: ", X_train_image.shape)
 print("First image sample:\n", X_train_image[0])
 print("First sample data's label:", y_train_lable[0])
 
+#Define x_train,y_train
 from keras.utils import to_categorical
 X_train = X_train_image.reshape(60000,28,28,1)
 X_test = X_test_image.reshape(10000,28,28,1)
@@ -16,6 +19,7 @@ y_test = to_categorical(y_test_lable, 10)
 print("Train shape: ", X_train.shape)
 print("First data lable: ",y_train[0])
 
+#Start adding convolution and pooling layers
 from keras import models
 from keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPooling2D
 model = models.Sequential()
@@ -30,7 +34,9 @@ model.add(Dropout(0.5))
 model.add(Dense(10, activation='softmax'))
 model.compile(optimizer='rmsprop',loss='categorical_crossentropy',metrics=['accuracy'])
 
+#Start training the model
 model.fit(X_train, y_train,validation_split=0.3,epochs=5,batch_size=128)
 
+#Evaluate the model and get a score
 score = model.evaluate(X_test, y_test)
 print("Model score: ", score[1])
